@@ -8,6 +8,8 @@ internet systems programming, fall 2019
 exta added on:
     resizable image at top of page.(for the akron crest.)
     responsive image at bottom of page. (will change the picture for the different sizes of pages.)
+    embeded youtube video
+    nonfunctional navigation bar.
 >
 <!DOCTYPE html>
 <html>
@@ -56,6 +58,7 @@ exta added on:
 			Your browser does not support the video tag.
 		</video>
 		<a href = "http://www.cs.uakron.edu">Link to cs home</a>
+		<div id="ListAndTable">
 		<br/>An unordered lsit
 		<ul style = "list-style-type : circle;">
 			<li>first</li>
@@ -67,7 +70,7 @@ exta added on:
 			<li>second</li>
 			<li>third</li>
 		</ul>
-		<ul style = "list-style-type : circle;">
+		<ul >
 			<li>first</li>
 			<li>second</li>
 			<li>third</li>
@@ -96,6 +99,7 @@ exta added on:
 				<td>third</td>
 			</tr>
 		</table>
+		</div>
 		<p style = "background-color : white; color : red; ">
 			This is a paragraph.<q>This is what I said.</q>
 			<hr>
@@ -116,4 +120,12 @@ exta added on:
 			<img scr = "Mid.jpg" alt = "Akron" style = "width : 90%">
 		</picture>
 	</div>
+	<iframe width="424" height="238" src="https://www.youtube.com/embed/xQEGEApU5U8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	<ul id = "navList" style = "width : 98%;">		
+		<li id = "nav" class = "active"><a class = "nav" herf = "#">Home</a></li>
+		<li id = "nav"><a class = "nav" herf = "#">News</a></li>
+		<li id = "nav"><a class = "nav" herf = "#">Trending</a></li>
+		<li id = "nav" style = "float : right"><a class = "nav" herf = "#">About</a></li>
+	</ul>
+	<br/><br/>
 </html>

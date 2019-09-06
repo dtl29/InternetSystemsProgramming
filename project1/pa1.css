@@ -57,9 +57,9 @@ a:active {
 	margin-left : 100px;
 	margin-right : 100px;
 	margin-bottom : 50px;
-	float : center;
-	padding : center;
 	width : 70%;
+	border-style : solid;
+	border-color : red;
 }
 
 .list1{
@@ -90,10 +90,10 @@ a:active {
 
 .form1 {
     float : right;
-    padding-left : 10px;
+    padding-left : 50px;
     margin-left : 50px;
     margin-right : 50px;
-    margin-top : 10px;
+    margin-top : 60px;
     margin-bottom : 10px;
     position : static;
 }
@@ -128,9 +128,50 @@ p3 {
 	font-variant : small-caps;
 	text-shadow: -4px 3px pink;
 }
+
 video {
     float : right;
-    padding-right : 40%;
+    padding-right : 20%;
     position : static;
+    width : 50%;
+    height : 35%;
+
 }
+
+#navList { 
+	list-style : none;
+	background-color : pink;
+	border-style : solid;
+	border-width : 1px;
+	border-radius : 5px;
+	padding : 0;
+	margin : 0;
+	overflow : hidden;
+	position : fixed;
+	bottom : 0;
+}
+#nav {
+	float : left;
+	padding-left : 10px;
+	padding-right : 10px;
+	width : 60px;
+	text-align : center;
+	border-style : solid;
+	border-width : 1px;
+	border-radius : 3px;
+	height : 30px;
+}
+#nav:hover:not(.active) {
+	background-color : white;
+	color : #cbf5f3;
+}
+.active { 
+	color : red;
+	background-color : grey;
+}
+.nav:hover:not(.active){
+	color : #cbf5f3;
+	text-decoration : none;
+}
+
 
