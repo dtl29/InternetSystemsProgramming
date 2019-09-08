@@ -1,0 +1,33 @@
+/*
+Daniel Louis
+Term project 
+*/
+#top {
+	float : left;
+	padding-right : 3px;
+	padding-left : 3px;
+}
+#navigation-top { 
+	background-color : white;
+	margin : 0;
+	padding : 0;
+	overflow : hidden;
+	width : 100%;
+	top : 0;
+	list-style-type : none;
+	position : fixed;
+	height : 35px;
+}
+#navigation-left {
+	width : 50px;
+	background-color : white;
+	height : 100%;
+	list-style=type : none;
+	position : fixed;
+	margin-top : 25px;
+	padding : 0;
+	overflow : auto;
+}
+body {
+	background-color : grey;
+}
