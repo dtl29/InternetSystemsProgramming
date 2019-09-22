@@ -6,58 +6,32 @@ Project 2
 
 <! DOCTYPE html>
 <style>
-th{
-	float : left;
+body{
+	background-color : #a4ebdd;
 }
-
 </style>
+<title>Pa2</title>
 <script src = "pa2.js"></script>
 <noscript>Sorry your browser does not support javascript.</noscript>
 <html>
 	<header>
+		<p>Daniel Louis <br/></p>
 		<input id = "number" value = "8">
 		<button type = "button" onclick = "factorialCalc()">Calculate Factorial</button>
 		<br/><br/>
-		<form target = "_blank" action = "post">
-			<input type = "text" name = "number" value = "8">
-			<table>
-				<tr>
-					<th><button type = "button">+</button></th>
-					<th><button type = "button">-</button></th>
-					<th><button type = "button">/</button></th>
-					<th><button type = "button">*</button></th>
-				</tr>
-				<tr>
-					<th><button type = "button">7</button></th>
-					<th><button type = "button">8</button></th>
-					<th><button type = "button">9</button></th>
-				</tr>
-				<tr>
-					<th><button type = "button">4</button></th>
-					<th><button type = "button">5</button></th>
-					<th><button type = "button">6</button></th>
-				</tr>
-				<tr>
-					<th><button type = "button">1</button></th>
-					<th><button type = "button">2</button></th>
-					<th><button type = "button">3</button></th>
-				</tr>
-				<tr>
-					<th><button type = "button">Enter</button></th>
-					<th><button type = "button">0</button></th>
-				</tr>
-			</table>
-		</form>
+
 	</header>
-	<body>
-		<div id = "anim">This should move when clicked!</div>
+	<body onmousedown = "animation()">		
 		<div>
 			<div id = "inputEmail"></div>
-			Please enter an enmail address : 
-			<input type = "text" id = "email" oninput = "emailCheckWhileTypeing()" value = "example@this.com" style = "color : grey;">
-			Or enter it here and validate it:
+			<div id = "inputEmail2" style = "float : right"></div>
+			Please enter an enmail address to validate it: 
+			<input type = "text" id = "email" oninput = "emailCheckWhileTyping()" style = "color : grey;">
+			Or enter it here and validate it with the button:
 			<input type = "text" id = "emailval" value = "example@this.com" style = "color : grey;">
-			<button type = "button" onclick = "emailCheckWhileClicked()">Validate</button>			
+			<button type = "button" onclick = "emailCheck()">Validate</button>			
+			<br/><br/>
 		</div>
+		<div id = "anim">This should move when clicked!</div>
 	</body>
 </html>
