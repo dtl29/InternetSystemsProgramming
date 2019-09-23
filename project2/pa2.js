@@ -4,15 +4,38 @@ Internet Systems Programming Fall 2019
 Project 2
 */
 
-function animation()
+function animation(event)
 {
 	var anim = document.getElementById("anim");
+	var desX = event.clientX;
+	var desY = event.clientY;
+	var posLeft = 0;
+	var posTop = 0;
+	var intTer = setInterval(frame,100);
+
+	function frame()
+	{
+		if(posLeft >= desX && posTop >= desY)
+		{
+			clearInterval(inTer);
+		}
+		if(posLeft < desX)
+		{
+			posLeft += desX/100;
+			anim.style.left = posLeft;
+		}
+		if(posTop < desY)
+		{
+			posTop += desY/100;
+			anim.style.top = posTop;
+		}
+	}
 }
 
 function emailCheckWhileTyping()
 {
 	var em = document.getElementById("email").value;
-    	var pos = em.search("@");
+    var pos = em.search("@");
 	var str1 = em.substr(0,pos);
 	var str2 = em.slice(pos+1);
 	var pos2 = str2.indexOf(".");
