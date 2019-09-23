@@ -17,16 +17,19 @@ body{
 <html>
 		<canvas id = "anim" height = "100px" width = "100px" style = "background-color : pink; position : absolute; top = 0; left = 0; z-index : -1; "></canvas>
 	<header>
-		<p>Daniel Louis <br/></p>
+		<p>Daniel Louis</p>
+		<p>finished 09/23/2019</p>
+		<p id = "time">curent time: </p>
 		<input id = "number" value = "8">
 		<button type = "button" onclick = "factorialCalc()">Calculate Factorial</button>
 		<br/><br/>
 
 	</header>
-	<body onmousedown = "animation(event)">		
-		
-			<div id = "inputEmail2" style = "float : left;"></div>
-			<div id = "inputEmail" stlye = "margin-left : 100px; margin-right : 100px;"></div>
+	<body onmousedown = "animation(event)" onload = "time()">
+			<p>Validate after button press output </p>		
+			<div id = "inputEmail2"></div>
+			<p>Validate while typing output: </p>
+			<div id = "inputEmail"></div>
 		<div styl = "width : 100%;">
 			Please enter an enmail address to validate it: 
 			<input type = "text" id = "email" oninput = "emailCheckWhileTyping()" style = "color : grey;">
