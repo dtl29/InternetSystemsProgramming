@@ -50,7 +50,7 @@ Project 3
 
 ?>
 
-<form action = "http://pausch.cs.uakron.edu/~dtl29/php/pa3.php"	method = "post">
+<form action = "http://pausch.cs.uakron.edu/~dtl29/pa3/pa3.php"	method = "post">
 	<head>Daniel Louis <br/>Project 3</head>
 	<body>
 		<dir></dir>
