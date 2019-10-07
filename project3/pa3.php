@@ -56,7 +56,7 @@ Project 3
 		<dir></dir>
 		<div>
 			<div style = "margin-left : 0px;">Current Value: <?php print("$curentValue"); ?></div>
-			<input type = "hidden" name = "curent" value = "<?php print($curentValue); ?>">
+			<input type = "hidden" name = "curent" value = "<?php print($curentValue); ?>"><br/>
 			<input type = "text" name = "new"></input><br/>
 			<table>
 				<tr><input type = "submit" name = "button" value = "+"></tr>
