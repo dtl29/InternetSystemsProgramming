@@ -1,13 +1,14 @@
 /*
 Daniel Louis
-Term project 
+Term project
 */
 #top {
 	float : left;
 	padding-right : 3px;
 	padding-left : 3px;
+  margin-top : 10px;
 }
-#navigation-top { 
+#navigation-top {
 	background-color : white;
 	margin : 0;
 	padding : 0;
@@ -16,18 +17,19 @@ Term project
 	top : 0;
 	list-style-type : none;
 	position : fixed;
-	height : 35px;
+	height : 75px;
 }
 #navigation-left {
-	width : 50px;
+	width : 90px;
 	background-color : white;
 	height : 100%;
 	list-style=type : none;
 	position : fixed;
-	margin-top : 25px;
+	margin-top : 65px;
 	padding : 0;
 	overflow : auto;
 }
+
 body {
 	background-color : grey;
 }
