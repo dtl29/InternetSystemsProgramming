@@ -1,0 +1,38 @@
+//create crads table
+create table Cards (
+	name varchar(400) primary key,
+    cmc varchar(50),
+    cardType varchar(50),
+    color varchar(5),
+    legBrawl varchar(10),
+    legCommander varchar(10),
+    legDuel varchar(10),
+    legFuture varchar(10),
+    legHistoric varchar(10),
+    legLegacy varchar(10),
+    legModern varchar(10),
+    legOlderschool varchar(10),
+    legPauper varchar(10),
+    legPenny varchar(10),
+    legPioneet varchar(10),
+    legStandard varchar(10),
+    legVintage varchar(10),
+    power int,
+    rarity varchar(50),
+    setName varchar(50),
+    toughness int,
+    image varchar(500)
+);
+
+//insert example
+use ISP_dtl29;
+INSERT INTO Cards(name, cmc, cardType, color,
+legBrawl,legCommander, legDuel, legFuture, legHistoric, legLegacy, 
+legModern,legOlderschool, legPauper, legPenny, legPioneer, 
+legStandard, legVintage,
+power, rarity, setName, toughness, image)	
+VALUES("Absorb","{W}{U}{U}","Instant","U,W",
+"legal","legal","legal","legal","legal","legal","legal","legal_not",
+"not_legal","not_legal","legal","legal","legal",
+null,"rare","Ravnica Allegiance",null,"https://img.scryfall.com/cards/large/front/1/e/1e8a43c1-42d1-45ef-8a63-4b87775a6e88.jpg?1572830246");
+select * from Cards;
