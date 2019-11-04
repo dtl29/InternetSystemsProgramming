@@ -1,1 +1,87 @@
-
+<!
+Daniel Louis
+Internet Systems Programming - Fall 2019
+Project 5: Dynamic website creation 
+>
+<!DOCTYPE html>
+<html>
+	<style>
+		th 
+		{
+			width : 30%;
+			float : left;
+			margin-left : 10px;
+			border : 1px solid black;
+		}
+		td
+		{
+			width : 30%;
+			float : left;
+			margin-left : 10px;
+			border : 1px solid black;
+		}
+		table
+		{
+			width : 100%;
+			border : 1px solid black;
+		}
+	</style>
+	<head>
+		<title>WebGen</title>
+		<p>Website Generator</p>
+	</head>
+	<body>
+		<form action="./pa5.php" method="post">
+			<table>
+				<tr>
+					<th>Add a paragraph<br/>
+						<input type="checkbox" name="paButton" value="button">Want a paraghraph?<br/>
+						<input type="text" name="pa" value="write something">
+					</th>
+					<th>Pick background color<br/>
+						<select name="color">
+							<option value="blue">Blue</option>
+							<option value="red">Red</option>
+							<option value="pink">Pink</option>
+						</select>
+					</th>
+					<th>Add button<br/>
+						<input type="checkbox" name="button" value="button">Want a button?<br/>
+						<input type="text" name="buttonWillDo" value="add some code here for the buton to do">
+					</th>
+				</tr>
+				<tr>
+					<th>Pick text color<br/>
+						<select name="textC">
+							<option value="black">Black</option>
+							<option value="white">White</option>
+							<option value="pink">Pink</option>
+						</select>
+					</th>
+					<th>Add an image<br/>
+						<input type="checkbox" name="imButton">Want an image?<br/>
+						<input type="text" name="image" value="url to image here">
+					</th>
+					<th>Add a title<br/>
+						<input type="checkbox" name="tiButton">Want an title?<br/>
+						<input type="text" name="title" value="title">
+					</th>
+				</tr>
+				<tr>
+					<th>
+						Add a youtube video<br/>
+						<input type="checkbox" name="YoButton">Want to add a Youtube video?<br/>
+						<input type="text" name="Youtube" value="Youtube url">
+					</th>
+					<th>
+						
+					</th>
+					<th>
+						
+					</th>
+				</tr>
+			</table>
+			<input type="submit" name="submit" value="submit"> 
+		</form>
+	</body>
+</html>
