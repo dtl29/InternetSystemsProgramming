@@ -34,6 +34,8 @@ Term project: card deck database for magic the gatehring
 	$image = $_POST["image"];
 	session_start();
 	$_SESSION['number'] = $_SESSION['number'] + 1;
+	$submitBool = false;
+	$bool = false;
 
 
 	if($power == "undefined")
@@ -78,11 +80,9 @@ VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
     <head>
 
         <br/>
-        <script src="ScryfallScapper.js"></script>
+        <script src="./ScryfallScapper.js"></script>
     </head>
-    <body onload="scrap('<?php print($_SESSION['number']) ?>')">
+    <body onload="scrap('<?php print($_SESSION['number']); $bool = true; ?>')">
         <div id="demo"></div>
     </body>
-</html>
-</body>
 </html>

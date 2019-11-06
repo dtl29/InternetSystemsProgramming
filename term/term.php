@@ -8,7 +8,7 @@ Term project: card deck database for magic the gatehring
 <title>MyDeck</title>
 <link rel = "stylesheet" href = "term.css">
 <?php
-
+	session_start();
 ?>
 <header>
 	<ul id="navigation-top">
@@ -25,6 +25,10 @@ Term project: card deck database for magic the gatehring
 				$submit = $_POST["submit"];
 				$password = $_POST["password"];
 				$username = $_POST["username"];
+				if($_SESSION['bool'] == null || $_SESSION['bool'] == false)
+				{
+					$_SESSION['bool'] = false;
+				}
 
 				if($submit == "Login")
 				{
@@ -39,10 +43,12 @@ Term project: card deck database for magic the gatehring
 					{
 						$stmt->bind_result($pas);
 						$stmt->fetch();
-						if($password == $pas)
+						if($password == $pas || $_SESSION['bool'] == true)
 						{
+							$_SESSION['bool'] = true;
+							$_SESSION['sessionUser'] = $username;
 							echo 'Hello ' . $username ;
-							header ( 'refresh:5; url=term.php?id='.$username );
+
 						}
 						else
 						{
@@ -69,7 +75,7 @@ Term project: card deck database for magic the gatehring
 
 					}
 				}
-				else if((empty($_GET['id'])))
+				else if($_SESSION['bool'] == false)
 				{
 					echo '
 						<input type="text" name="username" value="example name" style="color : grey;"><br/>
@@ -79,8 +85,7 @@ Term project: card deck database for magic the gatehring
 				}
 				else 
 				{
-					$username = $_GET['id'];
-					echo 'Hello ' . $username ;
+					echo 'Hello ' . $_SESSION['sessionUser'];
 				}
 			?>
 		</form>
@@ -90,7 +95,7 @@ Term project: card deck database for magic the gatehring
 </header>
 <body>
 	<ul id = "navigation-left">
-		<li id="left" style="margin-top : 5px;"><a href="MyDecks.php">My Decks</a></li>
+		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
 		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
 		<li id="left" style="margin-top : 5px;"><a href="#">Cards</a><li>
 		<li id="left" style="margin-top : 5px;">
@@ -120,6 +125,10 @@ Term project: card deck database for magic the gatehring
 							</tr>
 								<td>Password:</td>
 								<td><input type="text" name="passwordSU" value="123"><br/></td>
+							</tr>
+							<tr>
+								<td>Confirm Password: </td>
+								<td><input type="text" name="passwordConfirmSU" value="123"><br/></td>
 							</tr>
 							<tr>
 								<td>Email:</td>
