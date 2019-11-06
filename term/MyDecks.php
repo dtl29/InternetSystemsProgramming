@@ -210,6 +210,7 @@ Term project
 		  $format = $_POST["format"];
 		  //will check and add the deck if it checks out
 	  }
+	  $db->close();
   ?>
   </div>
 

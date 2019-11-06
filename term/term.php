@@ -97,7 +97,7 @@ Term project: card deck database for magic the gatehring
 	<ul id = "navigation-left">
 		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
 		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
-		<li id="left" style="margin-top : 5px;"><a href="#">Cards</a><li>
+		<li id="left" style="margin-top : 5px;"><a href="Cards.php">Cards</a><li>
 		<li id="left" style="margin-top : 5px;">
 			<form action="./term.php" method="post">
 				<input type="submit" name="submit" value="Sign Up">
@@ -230,6 +230,7 @@ Term project: card deck database for magic the gatehring
 				{
 					echo "This will print the normal site ";
 				}
+				$db->close();
 			?>
 	  </div>
 </div>
