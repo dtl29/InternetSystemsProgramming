@@ -30,7 +30,7 @@ Project 5: Dynamic website creation
 	</style>
 	<head>
 		<title>WebGen</title>
-		<p>Website Generator</p>
+		<p>Website Generator by Daniel Louis</p>
 	</head>
 	<body>
 		<form action="./pa5.php" method="post">
@@ -127,19 +127,21 @@ Project 5: Dynamic website creation
                 </tr>
                 <tr>
                     <th>
-                        Something<br />
-                        <input type="checkbox" name="Some Button" />Something<br />
-                        <input type="text" name="" value="" />
+                        Change the font size<br />
+                        <select name="fontSize">
+                            <option value="12">12pt</option>
+                            <option value="16">16pt</option>
+                            <option value="34">34pt</option>
+                        </select>
                     </th>
                     <th>
-                        Something<br />
-                        <input type="checkbox" name="Some Button" />Something<br />
-                        <input type="text" name="" value="" />
+                        Add a canvas<br />
+                        <input type="checkbox" name="canvasButton" />Want a canvas?<br />
                     </th>
                     <th>
-                        Something<br />
-                        <input type="checkbox" name="Some Button" />Something<br />
-                        <input type="text" name="" value="" />
+                        Add audio(mp3 only through url)<br />
+                        <input type="checkbox" name="audioButton" />Want to add audio?<br />
+                        <input type="text" name="audio" value="source of audio" />
                     </th>
                 </tr>
                 <tr>

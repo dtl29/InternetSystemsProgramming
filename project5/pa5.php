@@ -1,3 +1,8 @@
+<!
+Daniel Louis
+Internet Systems Programming - Fall 2019
+Project 5: Dynamic website creation 
+>
 <html>
 <head></head>
 <body>
@@ -29,6 +34,10 @@
 	$link = $_POST["link"];
 	$linkName = $_POST["linkName"];
 	$font = $_POST["font"];
+	$fontSize = $_POST["fontSize"];
+	$canvas = $_POST["canvasButton"];
+	$audioButton = $_POST["audioButton"];
+	$audio = $_POST["audio"];
 	$k = 0;
 	$numberOfAtributes = $rows * $columns - 1;
 
@@ -77,6 +86,10 @@
 				<input type="hidden" name="link" value="'.$link.'">
 				<input type="hidden" name="linkName" value="'.$linkName.'">
 				<input type="hidden" name="font" value="'.$font.'">
+				<input type="hidden" name="fontSize" value="'.$fontSize.'">
+				<input type="hidden" name="canvasButton" value="'.$canvas.'">
+				<input type="hidden" name="audioButton" value="'.$audioButton.'">
+				<input type="hidden" name="audio" value="'.$audio.'">
 
 				<input type="submit" name="submit" value="submit"> 
 			</form>
@@ -89,6 +102,7 @@
 					background-color : '. $backgroundColor .';
 					color : '. $textColor .';
 					font-family : '.$font.';
+					font-size : '.$fontSize.'px;
 		';
 		if($border == "on")
 		{
@@ -214,6 +228,21 @@
 		{
 			echo'
 				<a href="'.$link.'">'.$linkName.'
+			';
+		}
+		if($canvas == "on")
+		{	
+			echo'
+				<canvas id="myCanvas" width="200" height="100" style="border:1px solid #000000;"></canvas>
+			';
+		}
+		if($audioButton == "on")
+		{
+			echo'
+				<audio controls>
+					  <source src="'.$audio.'" type="audio/mpeg">
+					Your browser does not support the audio element.
+				</audio>
 			';
 		}
 	}
