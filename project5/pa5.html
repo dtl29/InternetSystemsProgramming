@@ -9,6 +9,7 @@ Project 5: Dynamic website creation
 		th 
 		{
 			width : 30%;
+            height : 90px;
 			float : left;
 			margin-left : 10px;
 			border : 1px solid black;
@@ -16,13 +17,14 @@ Project 5: Dynamic website creation
 		td
 		{
 			width : 30%;
+            height : 90px;
 			float : left;
 			margin-left : 10px;
 			border : 1px solid black;
 		}
 		table
 		{
-			width : 100%;
+			width : 80%;
 			border : 1px solid black;
 		}
 	</style>
@@ -73,13 +75,85 @@ Project 5: Dynamic website creation
 						<input type="checkbox" name="YoButton">Want to add a Youtube video?<br/>
 						<input type="text" name="Youtube" value="Youtube url">
 					</th>
-					<th>
-						
-					</th>
-					<th>
-						
-					</th>
+                    <th>
+                        Add a Table<br />
+                        <input type="checkbox" name="tableButton" />Do you want a table<br />
+                        <input type="text" name="rows" value="How many rows?" />
+                        <input type="text" name="columns" value="How many colums?" />
+                    </th>
+                    <th>
+                        Add a Time Stamp<br />
+                        <input type="checkbox" name="timeButton" />Do you want a time stamp?<br />
+                    </th>
 				</tr>
+                <tr>
+                    <th>
+                        Add a date stamp<br />
+                        <input type="checkbox" name="dateButton" />Want to add a date?<br />
+                    </th>
+                    <th>
+                        Add a border<br />
+                        <input type="checkbox" name="borderButton" />Want to have a border?<br />
+                        <select name="borderColor">
+                            <option value="black">Black</option>
+                            <option value="white">White</option>
+                            <option value="pink">Pink</option>
+                        </select>
+                    </th>
+                    <th>
+                         Add a Ajax Button<br />
+                        <input type="checkbox" name="ajaxButton" />Want a button to load ajax?<br />
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Add a line break<br />
+                        <input type="checkbox" name="lineButton" />want a line break?<br />
+                    </th>
+                    <th>
+                        Add a link<br />
+                        <input type="checkbox" name="linkButton" />Want a link?<br />
+                        <input type="text" name="linkName" value="name of link"/>
+                        <input type="text" name="link" value="place your link here" />
+                    </th>
+                    <th>
+                        Change the Font<br />
+                        <select name="font">
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Arial">Arial</option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Something<br />
+                        <input type="checkbox" name="Some Button" />Something<br />
+                        <input type="text" name="" value="" />
+                    </th>
+                    <th>
+                        Something<br />
+                        <input type="checkbox" name="Some Button" />Something<br />
+                        <input type="text" name="" value="" />
+                    </th>
+                    <th>
+                        Something<br />
+                        <input type="checkbox" name="Some Button" />Something<br />
+                        <input type="text" name="" value="" />
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        Something<br />
+                        <input type="checkbox" name="Some Button" />Something<br />
+                        <input type="text" name="" value="" />
+                    </th>
+                    <th>
+                        Something<br />
+                        <input type="checkbox" name="Some Button" />Something<br />
+                        <input type="text" name="" value="" />
+                    </th>
+                </tr>
 			</table>
 			<input type="submit" name="submit" value="submit"> 
 		</form>
