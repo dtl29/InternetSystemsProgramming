@@ -41,6 +41,8 @@ function scrap(searchText) {
                 + '"><input type="text" name="toughness" value="' + data.toughness
                 + '"><input type="text" name="image" value="' + data.image_uris.large
                 + '"><input type="submit" name="submit" value="Submit">'
+                +'<div id="text"></div>'
+                + '<script>window.onload=func(); function func(){document.getElementById("test").innerHTML = "This loaded correctly";}</script>'
                 + '</form > '
                 + '<image src="' + data.image_uris.large + '">';
             document.getElementById("demo").innerHTML += output;

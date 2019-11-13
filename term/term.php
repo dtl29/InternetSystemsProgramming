@@ -47,7 +47,9 @@ Term project: card deck database for magic the gatehring
 						{
 							$_SESSION['bool'] = true;
 							$_SESSION['sessionUser'] = $username;
-							echo 'Hello ' . $username ;
+							echo 'Hello ' . $username .' <br/>
+							<form action="term.php"  method="post"><input type="submit" name="submit" value="Logout"> </form>
+						';
 
 						}
 						else
@@ -83,9 +85,22 @@ Term project: card deck database for magic the gatehring
 						<input type="submit" name="submit" value="Login" style="float : right;">
 					';
 				}
+				else if($submit == "Logout")
+				{
+					$_SESSION['sessionUser'] = "";
+					$_SESSION['bool'] = false;
+					echo '
+						<input type="text" name="username" value="example name" style="color : grey;"><br/>
+						<input type="text" name="password" value="*****" style="color : grey;"><br/>
+						<input type="submit" name="submit" value="Login" style="float : right;">
+					';
+				}
 				else 
 				{
-					echo 'Hello ' . $_SESSION['sessionUser'];
+					echo '
+						Hello ' . $_SESSION['sessionUser'] .' <br/>
+						<form action="term.php"  method="post"><input type="submit" name="submit" value="Logout"> </form>
+						';
 				}
 			?>
 		</form>

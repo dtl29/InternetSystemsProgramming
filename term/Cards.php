@@ -179,8 +179,10 @@ Term project
 				exit;
 			}
 			//need to get the % % to have only  a string in it cahng it from a blob again 
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
-			$stmt->bind_param("ssb",$legal,$color,$type);
+			//$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
+			//$stmt->bind_param("ssb",$legal,$color,$type);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
 		}
 		if($format == "Modern")
 		{

@@ -1,5 +1,6 @@
 <!
 Daniel Louis
+HCI - Fall 2019
 Term project
 >
 <!DOCTYPE html>
@@ -44,7 +45,9 @@ Term project
 						{
 							$_SESSION['bool'] = true;
 							$_SESSION['sessionUser'] = $username;
-							echo 'Hello ' . $username ;
+							echo 'Hello ' . $username .' <br/>
+								<form action="term.php"  method="post"><input type="submit" name="submit" value="Logout"> </form>
+							';
 
 						}
 						else
@@ -80,9 +83,21 @@ Term project
 						<input type="submit" name="submit" value="Login" style="float : right;">
 					';
 				}
+				else if($submit == "Logout")
+				{
+					$_SESSION['sessionUser'] = "";
+					$_SESSION['bool'] = false;
+					echo '
+						<input type="text" name="username" value="example name" style="color : grey;"><br/>
+						<input type="text" name="password" value="*****" style="color : grey;"><br/>
+						<input type="submit" name="submit" value="Login" style="float : right;">
+					';
+				}
 				else 
 				{
-					echo 'Hello ' . $_SESSION['sessionUser'];
+					echo 'Hello ' . $_SESSION['sessionUser'] .' <br/>
+						<form action="term.php"  method="post"><input type="submit" name="submit" value="Logout"> </form>
+					';
 				}
 			?>
 		</form>
@@ -95,22 +110,22 @@ Term project
 	<ul id = "navigation-left">
 		<li id = "left" style = "margin-top : 5px;"><a href = "./MyDecks.php">My Decks</a></li>
 		<li id = "left" style = "margin-top : 5px;"><a href = "#">Top Decks</a></li>
-		<li id = "left" style = "margin-top : 5px;"><a href = "#">Cards</a><li>
+		<li id = "left" style = "margin-top : 5px;"><a href = "./Cards.php">Cards</a><li>
 	</ul>
-  <div style = "float : right; margin-top : 80px; margin-right : 30%;">
-  <script>
+	<div style = "float : right; margin-top : 80px; margin-right : 30%;">
+	<script>
 		function allowDrop(ev) {
-		  ev.preventDefault();
+			ev.preventDefault();
 		}
 
 		function drag(ev) {
-		  ev.dataTransfer.setData("text", ev.target.id);
+			ev.dataTransfer.setData("text", ev.target.id);
 		}
 
 		function drop(ev) {
-		  ev.preventDefault();
-		  var data = ev.dataTransfer.getData("text");
-		  ev.target.appendChild(document.getElementById(data));
+			ev.preventDefault();
+			var data = ev.dataTransfer.getData("text");
+			ev.target.appendChild(document.getElementById(data));
 		}
 	</script>
   <?php
@@ -133,24 +148,14 @@ Term project
 				<option value="Commander">Commander</option>
 				<option value="Pioneer">Pioneer</option>
 			</select><br/>
-			<input type="submit" name="submit" value="Create Deck">
 		</form>';
 		//should now have the rest of the creator 
-			//i.e two canvases with drag drop between then. 
-		$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
-		if ($db->connect_error) 
-		{
-			print "Error - Could not connect to MySQL";
-			exit;
-		}
-			$query = "SELECT name, image FROM Cards WHERE setName='Homelands'";
-			$result = $db->query($query);
-			$row = $result->fetch_row();
+
 		echo '
-		<canvas id="top" width="900" height="600" style="background-color : #ffeecc; border:1px solid #000000;"
-			ondrop="drop(event)" ondragover="allowDrop(event)"></canvas><br/>
-		<form action="./MyDecks.php" method="post">
-			Card Selecttion : <select type="dropdown" name="format">
+		<div id="top" style="width: 600px; height: 500px; padding: 10px; border: 1px solid black;" 
+			ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+		<form action="./MyDecks.php" method="post"><br/>
+			<br/>Card Selecttion : <select type="dropdown" name="format">
 				<option value="Standard" selected="selected">Standard</option>
 				<option value="Modern">Modern</option>
 				<option value="Legacy">Legacy</option>
@@ -159,12 +164,12 @@ Term project
 				<option value="Pioneer">Pioneer</option>
 			</select>
 			 <select type="dropdown" name="color">
-				<option value="white" selected="selected">White</option>
-				<option value="blue">Blue</option>
-				<option value="black">Black</option>
-				<option value="red">Red</option>
-				<option value="green">Green</option>
-				<option value="colorless">Colorless</option>
+				<option value="W" selected="selected">White</option>
+				<option value="U">Blue</option>
+				<option value="B">Black</option>
+				<option value="R">Red</option>
+				<option value="G">Green</option>
+				<option value="">Colorless</option>
 			</select>
 			 <select type="dropdown" name="type">
 				<option value="creature" selected="selected">Creature</option>
@@ -175,34 +180,102 @@ Term project
 				<option value="land">Land</option>
 			</select>
 			<input type="submit" name="submit" value="Find Cards">
+			<input type="submit" name="submit" value="Create Deck">
 		</form>
 		';
 		//use card selection to format this to select the cards (chang the querry)
-				$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+		$format = $_POST["format"];
+		$color = $_POST["color"];
+		$type = $_POST["type"];
+		$legal = "legal";
+		if($format == "")
+		{
+			$format = "Standard";
+			$color = "W";
+			$type = "creature";
+		}
+		$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
 		if ($db->connect_error) 
 		{
 			print "Error - Could not connect to MySQL";
 			exit;
 		}
-			$query = "SELECT name, image FROM Cards WHERE setName='Ice Age'";
-			$result = $db->query($query);
-			$row = $result->fetch_row();
+		$stmt;$Ccard;$Cname;
+		if($format == "Standard")
+		{
+			//need to get the % % to have only  a string in it cahng it from a blob again 
+			//$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
+			//$stmt->bind_param("ssb",$legal,$color,$type);
+			echo 'this was standard<br/>';
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+			if($stmt->execute())
+			{
+				//needs an argumnet for every argumnet
+				$stmt->bind_result($Cname,$Ccard);
+				$stmt->fetch();
+				echo 'This exectured '.$Cname;
+			}
+		}
+		if($format == "Modern")
+		{
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+		}
+		if($format == "Legacy")
+		{
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+		}
+		if($format == "Brawl")
+		{
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+		}
+		if($format == "Commander")
+		{
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+		}
+		if($format == "Pioneer")
+		{
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? LIMIT 39");
+			$stmt->bind_param("ss",$legal,$color);
+		}
+
+		if($stmt->execute())
+		{
+			//needs an argumnet for every argumnet
+			$stmt->bind_result($Cname,$Ccard);
+			$stmt->fetch();
+		}
+		else
+		{
+			echo 'This did not execute';
+		}
 		echo '
-		<table>
-			<tr>
-				<td>
-					<image src="'.$row[1].'"style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
-					<input type="hidden" value="'.row[0].'">
-				</td>';
-		$row = $result->fetch_row();
-		echo '
-				<td>
-					<image src="'.$row[1].'"style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
-					<input type="hidden" value="'.row[0].'">
-				</td>
-			</tr>
-		</table>
+			<table>
 		';
+		for($j =1; $j < 14; $j=$j+1)
+		{
+			echo '<tr>';
+			for($i =1; $i < 4; $i=$i+1)
+			{
+				echo '
+						<td>
+							<image id="'.$Cname.'" src="'.$Ccard.'"
+								style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
+						</td>
+				';
+				$stmt->fetch();
+			}
+			echo '</tr>';
+		}
+		echo '
+			</table>
+		';
+		$stmt->close();
+		$db->close();
 	  }
 	  if($submit == "Create Deck")
 	  {
@@ -213,6 +286,6 @@ Term project
 	  $db->close();
   ?>
   </div>
-
+  
 </body>
 </html>
