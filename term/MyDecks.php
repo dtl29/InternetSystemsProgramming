@@ -10,14 +10,14 @@ Term project
 <header>
 <?php session_start(); ?>
 	<ul id = "navigation-top">
-		<li id = "top"><a href = "./term.php">MyDeck</a></li>
-		<li id = "top" style = "margin-right : 15%; margin-left: 15%;">
+		<li id="top"><a href="./term.php">MyDeck</a></li>
+		<li id="top" style="margin-right : 15%; margin-left: 15%;">
       <form>
-			     <input type = "text" name = "Search" value = "Search Decks" style = "color : grey;">
-			     <input type = "submit" name = "submit" value = "magnifinGlass">
+			     <input type="text" name="Search" value="Search Decks" style="color : grey;">
+			     <input type="submit" name="submit" value="magnifinGlass">
 		  </form>
     </li>
-		<li id = "top" style = "float : right; margin-right : 20px;">
+		<li id="top" style="float : right; margin-right : 20px;">
       <form action="./term.php" method="post">
 			<?php
 				$submit = $_POST["submit"];
@@ -102,17 +102,17 @@ Term project
 			?>
 		</form>
     </li>
-    <li id = "top" style = "float : right;">Login:</li>
+    <li id = "top" style="float : right;">Login:</li>
 	</ul>
 </header>
 <body>
 	
-	<ul id = "navigation-left">
-		<li id = "left" style = "margin-top : 5px;"><a href = "./MyDecks.php">My Decks</a></li>
-		<li id = "left" style = "margin-top : 5px;"><a href = "#">Top Decks</a></li>
-		<li id = "left" style = "margin-top : 5px;"><a href = "./Cards.php">Cards</a><li>
+	<ul id="navigation-left">
+		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
+		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
+		<li id="left" style="margin-top : 5px;"><a href="./Cards.php">Cards</a><li>
 	</ul>
-	<div style = "float : right; margin-top : 80px; margin-right : 30%;">
+	<div style="float : right; margin-top : 80px; margin-right : 30%;">
 	<script>
 		function allowDrop(ev) {
 			ev.preventDefault();
@@ -126,17 +126,21 @@ Term project
 			ev.preventDefault();
 			var data = ev.dataTransfer.getData("text");
 			ev.target.appendChild(document.getElementById(data));
+			document.getElementById(data).style.width ="60px";
+			document.getElementById(data).style.height = "80px";
+			document.getElementById("hiddenCards").innerHTML += '<input type="hidden" name="hiddenCarsIn[]" value="'+data+'">';
 		}
 	</script>
   <?php
 	$submit = $_POST["submit"];
+	$hiddencards = $_POST["hiddenCarsIn"];
 	  if($submit == "")
 	  {
 		echo '<form action="./MyDecks.php" method="post"><input type="submit" name="submit" value="Create"></form>';
 	  }
 	  if($submit == "Create" || $submit == "Find Cards")
 	  {
-	  $decklist;
+		$decklist;
 		echo '<form action="./MyDecks.php" method="post">
 			Please provide a deck name: <input type="text" name="deckName" value="name"><br/>
 			Please select a format: 
@@ -152,8 +156,39 @@ Term project
 		//should now have the rest of the creator 
 
 		echo '
-		<div id="top" style="width: 600px; height: 500px; padding: 10px; border: 1px solid black;" 
-			ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+		<div id="deckBox" style="width: 600px; height: 500px; padding: 10px; border: 1px solid black;" 
+			ondrop="drop(event)" ondragover="allowDrop(event)">
+		';
+		if($hiddencards != "")
+		{
+			$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+			if ($db->connect_error) 
+			{
+				print "Error - Could not connect to MySQL";
+				exit;
+			}
+			$Ccard2;$Cname2;
+			for($i=0; $i < sizeof($hiddencards); $i++)
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE name=?");
+				$stmt->bind_param("s",$hiddencards[$i]);
+				if($stmt->execute())
+				{
+					//needs an argumnet for every argumnet
+					$stmt->bind_result($Cname2,$Ccard2);
+					$stmt->fetch();
+					echo '
+						<image id="'.$Cname2.'" src="'.$Ccard2.'"
+							style="width : 60px; height : 80px;">
+					';
+				}
+				$stmt->close();
+			}
+			$stmt->close();
+			$db->close();
+		}
+		echo '
+		</div>
 		<form action="./MyDecks.php" method="post"><br/>
 			<br/>Card Selecttion : <select type="dropdown" name="format">
 				<option value="Standard" selected="selected">Standard</option>
@@ -181,7 +216,21 @@ Term project
 			</select>
 			<input type="submit" name="submit" value="Find Cards">
 			<input type="submit" name="submit" value="Create Deck">
-		</form>
+			<div id="hiddenCards">
+		';
+		
+		if($hiddencards[0] != "")
+		{
+			for($i = 0; $i < sizeof($hiddencards); $i++)
+			{
+				echo '
+					<input type="hidden" name="hiddenCarsIn[]" value="'. $hiddencards[$i] .'">
+				';
+			}
+		}
+		echo '
+			</div>
+			</form>
 		';
 		//use card selection to format this to select the cards (chang the querry)
 		$format = $_POST["format"];
@@ -206,7 +255,6 @@ Term project
 			//need to get the % % to have only  a string in it cahng it from a blob again 
 			//$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
 			//$stmt->bind_param("ssb",$legal,$color,$type);
-			echo 'this was standard<br/>';
 			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
 			$stmt->bind_param("ss",$legal,$color);
 			if($stmt->execute())
@@ -214,7 +262,6 @@ Term project
 				//needs an argumnet for every argumnet
 				$stmt->bind_result($Cname,$Ccard);
 				$stmt->fetch();
-				echo 'This exectured '.$Cname;
 			}
 		}
 		if($format == "Modern")
@@ -254,36 +301,35 @@ Term project
 			echo 'This did not execute';
 		}
 		echo '
+			<div style="overflow-x : auto; overflow-y : hidden; width : 600px; height : 300px;">
 			<table>
 		';
+		$CnamePrevious;
 		for($j =1; $j < 14; $j=$j+1)
 		{
-			echo '<tr>';
 			for($i =1; $i < 4; $i=$i+1)
 			{
+				if($Cname == $CnamePrevious)
+				{
+					break;
+				}
 				echo '
-						<td>
-							<image id="'.$Cname.'" src="'.$Ccard.'"
-								style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
-						</td>
+					<tr>
+						<image id="'.$Cname.'" src="'.$Ccard.'"
+							style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
+					</tr>
 				';
+				$CnamePrevious = $Cname;
 				$stmt->fetch();
 			}
-			echo '</tr>';
 		}
 		echo '
 			</table>
+			</div><br/><br/>
 		';
 		$stmt->close();
 		$db->close();
 	  }
-	  if($submit == "Create Deck")
-	  {
-	  	  $name = $_POST["deckName"];
-		  $format = $_POST["format"];
-		  //will check and add the deck if it checks out
-	  }
-	  $db->close();
   ?>
   </div>
   
