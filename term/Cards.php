@@ -178,11 +178,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			//need to get the % % to have only  a string in it cahng it from a blob again 
-			//$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
-			//$stmt->bind_param("ssb",$legal,$color,$type);
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "Modern")
 		{
@@ -192,8 +197,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "Legacy")
 		{
@@ -203,8 +216,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "Brawl")
 		{
@@ -214,8 +235,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "Commander")
 		{
@@ -225,8 +254,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "Pioneer")
 		{
@@ -236,8 +273,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("sss",$legal,$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? LIMIT 39");
+				$stmt->bind_param("ss",$legal,$color);
+			}
 		}
 		if($format == "all")
 		{
@@ -247,8 +292,16 @@ Term project
 				print "Error - Could not connect to MySQL";
 				exit;
 			}
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE color=? LIMIT 39");
-			$stmt->bind_param("s", $color);
+			if($type != "")
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+				$stmt->bind_param("ss",$color,$type);
+			}
+			else
+			{
+				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE color=? LIMIT 39");
+				$stmt->bind_param("s",$color);
+			}
 		}
 		$Ccard;$Cname;
 		if($stmt->execute())
@@ -291,17 +344,23 @@ Term project
 		echo '
 			<table>
 		';
+		$CnamePrevious;
 		for($j =1; $j < 14; $j=$j+1)
 		{
 			echo '<tr>';
 			for($i =1; $i < 4; $i=$i+1)
 			{
+				if($Cname == $CnamePrevious)
+				{
+					break;
+				}
 				echo '
 						<td>
 							<image src="'.$Ccard.'"style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
 							<input type="hidden" value="'.$Cname.'">
 						</td>
 				';
+				$CnamePrevious = $Cname;
 				$stmt->fetch();
 			}
 			echo '</tr>';

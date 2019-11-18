@@ -105,8 +105,7 @@ Term project
     <li id = "top" style="float : right;">Login:</li>
 	</ul>
 </header>
-<body>
-	
+<body>	
 	<ul id="navigation-left">
 		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
 		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
@@ -125,15 +124,37 @@ Term project
 		function drop(ev) {
 			ev.preventDefault();
 			var data = ev.dataTransfer.getData("text");
-			ev.target.appendChild(document.getElementById(data));
-			document.getElementById(data).style.width ="60px";
-			document.getElementById(data).style.height = "80px";
-			document.getElementById("hiddenCards").innerHTML += '<input type="hidden" name="hiddenCarsIn[]" value="'+data+'">';
+			var ar = document.getElementsByName("hiddenCarsIn[]");
+			var cardCount = 0;
+			var i = 0;
+
+			while(i < ar.length)
+			{
+				if(ar[i].value == data)
+				{
+					cardCount++;
+				}
+				i++;
+			}
+			if(cardCount < 4 && ar.length < 60)
+			{
+				ev.target.appendChild(document.getElementById(data));
+				document.getElementById(data).style.width ="60px";
+				document.getElementById(data).style.height = "80px";
+				document.getElementById("hiddenCards").innerHTML += '<input type="hidden" name="hiddenCarsIn[]" value="'+data+'">';
+				document.forms["formmy"].submit();
+			}
+			else
+			{
+				document.getElementById("formmy").submit();
+			}
 		}
 	</script>
   <?php
 	$submit = $_POST["submit"];
 	$hiddencards = $_POST["hiddenCarsIn"];
+	$deckName = $_POST["deckName"];
+	$format = $_POST["format"];
 	  if($submit == "")
 	  {
 		echo '<form action="./MyDecks.php" method="post"><input type="submit" name="submit" value="Create"></form>';
@@ -141,8 +162,8 @@ Term project
 	  if($submit == "Create" || $submit == "Find Cards")
 	  {
 		$decklist;
-		echo '<form action="./MyDecks.php" method="post">
-			Please provide a deck name: <input type="text" name="deckName" value="name"><br/>
+		echo '<form id="formmy" action="./MyDecks.php" method="post">
+			Please provide a deck name: <input type="text" name="deckName" value="'.$deckName.'"><br/>
 			Please select a format: 
 			<select type="dropdown" name="format">
 				<option value="Standard">Standard</option>
@@ -152,7 +173,7 @@ Term project
 				<option value="Commander">Commander</option>
 				<option value="Pioneer">Pioneer</option>
 			</select><br/>
-		</form>';
+		';
 		//should now have the rest of the creator 
 
 		echo '
@@ -189,11 +210,10 @@ Term project
 		}
 		echo '
 		</div>
-		<form action="./MyDecks.php" method="post"><br/>
 			<br/>Card Selecttion : <select type="dropdown" name="format">
-				<option value="Standard" selected="selected">Standard</option>
+				<option value="Standard">Standard</option>
 				<option value="Modern">Modern</option>
-				<option value="Legacy">Legacy</option>
+				<option value="Legacy" selected="selected">Legacy</option>
 				<option value="Brwal">Brawl</option>
 				<option value="Commander">Commander</option>
 				<option value="Pioneer">Pioneer</option>
@@ -252,42 +272,39 @@ Term project
 		$stmt;$Ccard;$Cname;
 		if($format == "Standard")
 		{
-			//need to get the % % to have only  a string in it cahng it from a blob again 
-			//$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE '%?%' LIMIT 39");
-			//$stmt->bind_param("ssb",$legal,$color,$type);
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+	
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legStandard=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 			if($stmt->execute())
 			{
-				//needs an argumnet for every argumnet
 				$stmt->bind_result($Cname,$Ccard);
 				$stmt->fetch();
 			}
 		}
 		if($format == "Modern")
 		{
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legModern=? AND color=? AND cardType LIKE CONCAT('%',?,'%') LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 		}
 		if($format == "Legacy")
 		{
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legLegacy=? AND color=? AND cardType LIKE CONCAT('%',?,'%')  LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 		}
 		if($format == "Brawl")
 		{
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legBrawl=? AND color=? AND cardType LIKE CONCAT('%',?,'%')  LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 		}
 		if($format == "Commander")
 		{
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legCommander=? AND color=? AND cardType LIKE CONCAT('%',?,'%')  LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 		}
 		if($format == "Pioneer")
 		{
-			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? LIMIT 39");
-			$stmt->bind_param("ss",$legal,$color);
+			$stmt = $db->prepare("SELECT name, image FROM Cards WHERE legPioneer=? AND color=? AND cardType LIKE CONCAT('%',?,'%')  LIMIT 39");
+			$stmt->bind_param("sss",$legal,$color,$type);
 		}
 
 		if($stmt->execute())
@@ -330,6 +347,46 @@ Term project
 		$stmt->close();
 		$db->close();
 	  }
+	 /* else if($submit == "Create Deck")
+	  {
+	  	  if(sizeof($hiddenCarsIn) < 60 || $_SESSION['sessionUser'] == "")
+		  {
+			   echo '
+					<p>Sorry the deck was incomplete</p>
+					<form action="./MyDecks.php" method="post">
+						<input type="submit" name="submit" value="Create">
+					</form>
+			   ';
+		  }
+		  else
+		  {
+				$deckList;
+				$i = 0;
+				while($i < sizeof($hiddenCarsIn)
+				{
+					$deckList += $hiddenCarsIn[$i] + ",";
+				}
+				echo'
+					'.$deckList.' that was the decklist 
+				';
+				
+				 $db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+				if ($db->connect_error) {
+					print "Error - Could not connect to MySQL";
+					exit;
+				}
+				$stmt = $db->prepare("INSERT INTO Decks(name,nameOfCreator,PrimaryCard,deckList) VALUES(?,?,?,?)");
+				$stmt->bind_param("ssss",);
+				if($stmt->execute())
+				{
+			
+				}
+				
+		  		  echo '<p>Your deck has been added to the database</p>';
+
+		  }
+	  }
+	  */
   ?>
   </div>
   
