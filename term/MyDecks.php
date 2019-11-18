@@ -155,10 +155,50 @@ Term project
 	$hiddencards = $_POST["hiddenCarsIn"];
 	$deckName = $_POST["deckName"];
 	$format = $_POST["format"];
-	  if($submit == "")
+	  if($submit == "" || $submit == "Back")
 	  {
-		echo '<form action="./MyDecks.php" method="post"><input type="submit" name="submit" value="Create"></form>';
-	  }
+		echo '<div id="CreatSpace" style="margin-right : 80%; width : 600px"><form action="./MyDecks.php" method="post"><input type="submit" name="submit" value="Create"></form>';
+		
+		$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+		if ($db->connect_error) 
+		{
+			print "Error - Could not connect to MySQL";
+			exit;
+		}
+		
+		$stmt = $db->prepare('SELECT * FROM Decks WHERE nameOfCreator="?"');
+		$stmt->bind_param("s",$_SESSION['sessionUser']);
+		  		 
+		$deckNameId; $creator; $imageCard; $list;
+		$stmt->bind_result($deckNameId, $creator, $imageCard, $list);
+		$stmt->fetch();
+		$i=0;
+		echo'
+			<table style="width : 600px;">
+				<tr>
+					<td>Deck Name<td>
+					<td>Image</td>
+					<td>Cards</td>
+					<td>Creator</td>
+				</tr>
+		';
+		while($i < mysqli_stmt_num_rows($stmt) || mysqli_stmt_num_rows($stmt) != 0)
+		{
+			echo'
+				<tr>
+					<td>'.$deckNameId.'</td>
+					<td>'.$imageCard.'</td>
+					<td>'.$list.'</td>
+					<td>'.$creator.'</td>
+				</tr>
+			';
+			$stmt->fetch();
+			$i++;
+		}
+		echo'
+			</table></div>
+		';
+	 }
 	  if($submit == "Create" || $submit == "Find Cards")
 	  {
 		$decklist;
@@ -236,6 +276,7 @@ Term project
 			</select>
 			<input type="submit" name="submit" value="Find Cards">
 			<input type="submit" name="submit" value="Create Deck">
+			<input type="submit" name="submit" value="Back">
 			<div id="hiddenCards">
 		';
 		
@@ -319,7 +360,7 @@ Term project
 		}
 		echo '
 			<div style="overflow-x : auto; overflow-y : hidden; width : 600px; height : 300px;">
-			<table>
+			<table><tr>
 		';
 		$CnamePrevious;
 		for($j =1; $j < 14; $j=$j+1)
@@ -331,28 +372,30 @@ Term project
 					break;
 				}
 				echo '
-					<tr>
+					<td>
 						<image id="'.$Cname.'" src="'.$Ccard.'"
 							style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
-					</tr>
+					</td>
 				';
 				$CnamePrevious = $Cname;
 				$stmt->fetch();
 			}
 		}
 		echo '
-			</table>
+			</tr></table>
 			</div><br/><br/>
 		';
 		$stmt->close();
 		$db->close();
 	  }
-	 /* else if($submit == "Create Deck")
+	  else if($submit == "Create Deck")
 	  {
-	  	  if(sizeof($hiddenCarsIn) < 60 || $_SESSION['sessionUser'] == "")
+		  $size = sizeof($hiddencards);
+	  	  if(sizeof($hiddencards) < 60 || $_SESSION['sessionUser'] == "")
 		  {
 			   echo '
-					<p>Sorry the deck was incomplete</p>
+					<p>Sorry the deck was incomplete the deck needs to be at least<br/> 60 cards and 
+					you have '.$size.' <br/></p>
 					<form action="./MyDecks.php" method="post">
 						<input type="submit" name="submit" value="Create">
 					</form>
@@ -362,31 +405,68 @@ Term project
 		  {
 				$deckList;
 				$i = 0;
-				while($i < sizeof($hiddenCarsIn)
+				while($i < sizeof($hiddencards))
 				{
-					$deckList += $hiddenCarsIn[$i] + ",";
+					$deckList .= $hiddencards[$i] . ",";
+					$i++;
 				}
 				echo'
-					'.$deckList.' that was the decklist 
+					: '.$deckList.' that was the decklist 
 				';
 				
-				 $db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
-				if ($db->connect_error) {
+				$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+				if ($db->connect_error) 
+				{
 					print "Error - Could not connect to MySQL";
 					exit;
 				}
-				$stmt = $db->prepare("INSERT INTO Decks(name,nameOfCreator,PrimaryCard,deckList) VALUES(?,?,?,?)");
-				$stmt->bind_param("ssss",);
+				$stmt = $db->prepare("INSERT INTO Decks(name,nameOfCreator,primaryCard,deckList) VALUES(?,?,?,?)");
+				$stmt->bind_param("ssss",deckName,$_SESSION['sessionUser'],$hiddencards[0], $deckList);
 				if($stmt->execute())
 				{
-			
+					 echo '<p>Your deck has been added to the database</p>';
 				}
-				
-		  		  echo '<p>Your deck has been added to the database</p>';
+				else
+				{
+					echo'<p>failed to place in table</p>';
+				}
+				$stmt.close();
 
+				
+				$stmt = $db->prepare('SELECT * FROM Decks WHERE nameOfCreator="?"');
+				$stmt->bind_param("s",$_SESSION['sessionUser']);
+		  		 
+				$deckNameId; $creator; $imageCard; $list;
+				$stmt->bind_result($deckNameId, $creator, $imageCard, $list);
+				$stmt->fetch();
+				$i=0;
+				echo'
+					<table style="width : 600px;">
+						<tr>
+							<td>Deck Name<td>
+							<td>Image</td>
+							<td>Cards</td>
+							<td>Creator</td>
+						</tr>
+				';
+				while($i < mysqli_stmt_num_rows($stmt) || mysqli_stmt_num_rows($stmt) != 0)
+				{
+					echo'
+						<tr>
+							<td>'.$deckNameId.'</td>
+							<td>'.$imageCard.'</td>
+							<td>'.$list.'</td>
+							<td>'.$creator.'</td>
+						</tr>
+					';
+					$stmt->fetch();
+					$i++;
+				}
+				echo'
+					</table></div>
+				';
 		  }
 	  }
-	  */
   ?>
   </div>
   
