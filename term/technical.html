@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<script>
+	function fun()
+	{
+		window.location = "./term.php";
+	}
+</script>
+<body>
+    <p>This website was created by: Daniel Louis.</p><br />
+    <p>
+        The architecture of this project was created with php, html, and javascript. Along with a database. In order to create a four tier architecture website
+        <br /> The database schema is made out of three tables:
+        <br /> Decks(name, nameOfCreator, primaryCard, decklist),
+        <br />DeckUsers(id,username, password, email),
+        <br /> and Cards(name, cmc(converted mama cost), cardType, color, legalBrawl, legalComander... power, rarity, setName, toughness, image).
+    </p>
+    <p>
+        The Cards table's attributes are all the identifiers for the card within the game to have a better look up for the user, so
+        <br /> the user can look up what card they need easier.
+    </p><br />
+    <p>some special features I added was drag drop feature for the deck building (I couldn't get the page to reload properly so it does not work as desiered). </p>
+    <button type="button" onclick="fun()">Back To Project</button>
+</body>
+</html>

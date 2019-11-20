@@ -11,13 +11,18 @@ Term project: card deck database for magic the gatehring
 	session_start();
 ?>
 <header>
+<style>
+	td 
+	{
+		width : 150px;
+		overflow : hidden;
+		border : 1px solid black;
+	}
+</style>
 	<ul id="navigation-top">
 		<li id="top"><a href="#">MyDeck</a></li>
 		<li id="top" style="margin-right : 15%; margin-left: 15%;">
-		<form action="" method="post">
-			<input type="text" name="Search" value="Search Decks" style="color : grey;">
-			<input type="submit" name="submit" value="magnifinGlass">
-		</form>
+
     </li>
 	<li id = "top" style = "float : right; margin-right : 20px;">
 		<form action="./term.php" method="post">
@@ -111,13 +116,14 @@ Term project: card deck database for magic the gatehring
 <body>
 	<ul id = "navigation-left">
 		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
-		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
 		<li id="left" style="margin-top : 5px;"><a href="Cards.php">Cards</a><li>
 		<li id="left" style="margin-top : 5px;">
 			<form action="./term.php" method="post">
 				<input type="submit" name="submit" value="Sign Up">
 			</form>
-		</li>
+		</li><br/>
+		<li><a href="./help.html">Help</a></li>
+		<li><a href="./technical.html">Technical</a></li>
 	</ul>
 	<div id="mainBody">
 		<div style="float : right; margin-top : 80px; margin-right : 50%;">
@@ -243,9 +249,71 @@ Term project: card deck database for magic the gatehring
 				}
 				if($willPrintDefault)
 				{
-					echo "This will print the normal site ";
+					echo 'Some Decks are: <br/>';
+		
+					$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
+					if ($db->connect_error) 
+					{
+						print "Error - Could not connect to MySQL";
+						exit;
+					}
+		
+					$stmt = $db->prepare('SELECT * FROM Decks');
+		  			$stmt->bind_param();
+					$stmt->execute();
+
+					$deckNameId; $creator; $imageCard; $list;
+
+					$stmt->bind_result($deckNameId, $creator, $imageCard, $list);
+					$stmt->fetch();
+					$i=0;
+					echo'
+						<table style="width : 600px;">
+							<tr>
+								<td>Deck Name</td>
+								<td>Image</td>
+								<td>Cards</td>
+								<td>Creator</td>
+							</tr>
+					';
+					$previosName ='';
+					while($i < 30)
+					{
+						$array = explode(',', $list);
+						if($deckNameId == $previosName)
+						{
+							break;
+						}
+						echo'
+							<tr>
+								<td>'.$deckNameId.'</td>
+								<td>'.$imageCard.'</td>
+								<td>'.$array[0]. ' ';
+								$j = 1;
+								while($j < sizeof($array))
+								{
+									echo $array[$j]. ' ';
+									if($j%15==0)
+									{
+										echo'<br/>';
+									}
+									$j++;
+								}
+								echo'</td>
+								<td>'.$creator.'</td>
+							</tr>
+						';
+						$previosName = $deckNameId;
+						$stmt->fetch();
+						$i++;
+					}
+					echo'
+						</table></div>
+					';
+					$stmt->close();
+					$db->close();
 				}
-				$db->close();
+
 			?>
 	  </div>
 </div>

@@ -11,10 +11,7 @@ Term project
 	<ul id = "navigation-top">
 		<li id = "top"><a href = "./term.php">MyDeck</a></li>
 		<li id = "top" style = "margin-right : 15%; margin-left: 15%;">
-      <form>
-			     <input type = "text" name = "Search" value = "Search Decks" style = "color : grey;">
-			     <input type = "submit" name = "submit" value = "magnifinGlass">
-		  </form>
+
     </li>
 		<li id = "top" style = "float : right; margin-right : 20px;">
       <form action="./term.php" method="post">
@@ -94,7 +91,7 @@ Term project
 	
 	<ul id = "navigation-left">
 		<li id = "left" style = "margin-top : 5px;"><a href = "./MyDecks.php">My Decks</a></li>
-		<li id = "left" style = "margin-top : 5px;"><a href = "#">Top Decks</a></li>
+
 		<li id = "left" style = "margin-top : 5px;"><a href = "#">Cards</a><li>
 	</ul>
   <div style = "float : right; margin-top : 80px; margin-right : 30%;">

@@ -8,14 +8,42 @@ Term project
 <title>MyDeck</title>
 <link rel = "stylesheet" href = "term.css">
 <header>
+<style>
+	.tooltip {
+		position: relative;
+		display: inline-block;
+		border-bottom: 1px dotted black;
+	}
+
+	.tooltip .tooltiptext {
+		visibility: hidden;
+		width: 120px;
+		background-color: black;
+		color: #fff;
+		text-align: center;
+		border-radius: 6px;
+		padding: 5px 0;
+
+		/* Position the tooltip */
+		position: absolute;
+		z-index: 1;
+	}
+
+	.tooltip:hover .tooltiptext {
+		visibility: visible;
+	}
+		td 
+	{
+		width : 150px;
+		overflow : hidden;
+		border : 1px solid black;
+	}
+</style>
 <?php session_start(); ?>
 	<ul id = "navigation-top">
 		<li id="top"><a href="./term.php">MyDeck</a></li>
 		<li id="top" style="margin-right : 15%; margin-left: 15%;">
-      <form>
-			     <input type="text" name="Search" value="Search Decks" style="color : grey;">
-			     <input type="submit" name="submit" value="magnifinGlass">
-		  </form>
+
     </li>
 		<li id="top" style="float : right; margin-right : 20px;">
       <form action="./term.php" method="post">
@@ -108,20 +136,23 @@ Term project
 <body>	
 	<ul id="navigation-left">
 		<li id="left" style="margin-top : 5px;"><a href="./MyDecks.php">My Decks</a></li>
-		<li id="left" style="margin-top : 5px;"><a href="#">Top Decks</a></li>
+
 		<li id="left" style="margin-top : 5px;"><a href="./Cards.php">Cards</a><li>
 	</ul>
 	<div style="float : right; margin-top : 80px; margin-right : 30%;">
 	<script>
-		function allowDrop(ev) {
+		function allowDrop(ev) 
+		{
 			ev.preventDefault();
 		}
 
-		function drag(ev) {
+		function drag(ev) 
+		{
 			ev.dataTransfer.setData("text", ev.target.id);
 		}
 
-		function drop(ev) {
+		function drop(ev) 
+		{
 			ev.preventDefault();
 			var data = ev.dataTransfer.getData("text");
 			var ar = document.getElementsByName("hiddenCarsIn[]");
@@ -136,17 +167,61 @@ Term project
 				}
 				i++;
 			}
-			if(cardCount < 4 && ar.length < 60)
+			if((cardCount < 4 || data == "Plains" || data=="Island" || data=="Forest" || data=="Swamp" || data=="Mountain"))
 			{
-				ev.target.appendChild(document.getElementById(data));
+				var copyCard = document.getElementById(data);
+				ev.target.appendChild(copyCard);
 				document.getElementById(data).style.width ="60px";
 				document.getElementById(data).style.height = "80px";
 				document.getElementById("hiddenCards").innerHTML += '<input type="hidden" name="hiddenCarsIn[]" value="'+data+'">';
-				document.forms["formmy"].submit();
+				//document.getElementById("myForm").submit();
 			}
 			else
 			{
-				document.getElementById("formmy").submit();
+				//document.getElementById("myForm").submit();
+			}
+		}
+		function addCard(name)
+		{
+			var ar = document.getElementsByName("hiddenCarsIn[]");
+			var cardCount = 0;
+			var i = 0;
+
+			while(i < ar.length)
+			{
+				if(ar[i].value == name)
+				{
+					cardCount++;
+				}
+				i++;
+			}
+			if((cardCount < 4 || name == "Plains" || name=="Island" || name=="Forest" || name=="Swamp" || name=="Mountain") )
+			{
+				document.getElementById("hiddenCards").innerHTML += '<input type="hidden" name="hiddenCarsIn[]" value="'+name+'">';
+				//document.form["myForm"].submit();
+			}
+		}
+		function subCard(name)
+		{
+			var ar = document.getElementsByName("hiddenCarsIn[]");
+			var cardCount = 0;
+			var i = 0;
+
+			while(i < ar.length)
+			{
+				if(ar[i].value == name)
+				{
+					cardCount++;
+				}
+				i++;
+			}
+			if(cardCount > 0)
+			{
+				var ar = document.getElementById("hiddenCards").innerHTML;
+				//delete string from ar
+				ar = ar.replace('<input type="hidden" name="hiddenCarsIn[]" value="'+name+'">', '');
+				document.getElementById("hiddenCards").innerHTML = ar;
+				//document.getElementById("myForm").submit();
 			}
 		}
 	</script>
@@ -166,43 +241,65 @@ Term project
 			exit;
 		}
 		
-		$stmt = $db->prepare('SELECT * FROM Decks WHERE nameOfCreator="?"');
+		$stmt = $db->prepare('SELECT * FROM Decks WHERE nameOfCreator=?');
 		$stmt->bind_param("s",$_SESSION['sessionUser']);
-		  		 
+		$stmt->execute();
+
 		$deckNameId; $creator; $imageCard; $list;
+
 		$stmt->bind_result($deckNameId, $creator, $imageCard, $list);
 		$stmt->fetch();
 		$i=0;
 		echo'
 			<table style="width : 600px;">
 				<tr>
-					<td>Deck Name<td>
+					<td>Deck Name</td>
 					<td>Image</td>
 					<td>Cards</td>
 					<td>Creator</td>
 				</tr>
 		';
-		while($i < mysqli_stmt_num_rows($stmt) || mysqli_stmt_num_rows($stmt) != 0)
+		$previosName ='';
+		while($i < 30)
 		{
+			$array = explode(',', $list);
+			if($deckNameId == $previosName)
+			{
+				break;
+			}
 			echo'
 				<tr>
 					<td>'.$deckNameId.'</td>
 					<td>'.$imageCard.'</td>
-					<td>'.$list.'</td>
+					<td>'.$array[0]. ' ';
+					$j = 1;
+					while($j < sizeof($array))
+					{
+						echo $array[$j]. ' ';
+						if($j%15==0)
+						{
+							echo'<br/>';
+						}
+						$j++;
+					}
+					echo'</td>
 					<td>'.$creator.'</td>
 				</tr>
 			';
+			$previosName = $deckNameId;
 			$stmt->fetch();
 			$i++;
 		}
 		echo'
 			</table></div>
 		';
+		$stmt->close();
+		$db->close();
 	 }
 	  if($submit == "Create" || $submit == "Find Cards")
 	  {
 		$decklist;
-		echo '<form id="formmy" action="./MyDecks.php" method="post">
+		echo '<form id="myForm" action="./MyDecks.php" method="post">
 			Please provide a deck name: <input type="text" name="deckName" value="'.$deckName.'"><br/>
 			Please select a format: 
 			<select type="dropdown" name="format">
@@ -217,8 +314,8 @@ Term project
 		//should now have the rest of the creator 
 
 		echo '
-		<div id="deckBox" style="width: 600px; height: 500px; padding: 10px; border: 1px solid black;" 
-			ondrop="drop(event)" ondragover="allowDrop(event)">
+			<div id="deckBox" style="width: 600px; height: 500px; padding: 10px; border: 1px solid black;" 
+				ondrop="drop(event)" ondragover="allowDrop(event)">
 		';
 		if($hiddencards != "")
 		{
@@ -229,6 +326,7 @@ Term project
 				exit;
 			}
 			$Ccard2;$Cname2;
+			sort($hiddencards);
 			for($i=0; $i < sizeof($hiddencards); $i++)
 			{
 				$stmt = $db->prepare("SELECT name, image FROM Cards WHERE name=?");
@@ -239,8 +337,8 @@ Term project
 					$stmt->bind_result($Cname2,$Ccard2);
 					$stmt->fetch();
 					echo '
-						<image id="'.$Cname2.'" src="'.$Ccard2.'"
-							style="width : 60px; height : 80px;">
+						<div class="tooltip"><image id="'.$Cname2.'" src="'.$Ccard2.'"
+							style="width : 60px; height : 80px;"><span class="tooltiptext"><button type="button" onclick="addCard(\''.$Cname2.'\')">Add</button><button type="button" onclick="subCard(\''.$Cname2.'\')">Sub</button></span></div>
 					';
 				}
 				$stmt->close();
@@ -249,34 +347,34 @@ Term project
 			$db->close();
 		}
 		echo '
-		</div>
-			<br/>Card Selecttion : <select type="dropdown" name="format">
-				<option value="Standard">Standard</option>
-				<option value="Modern">Modern</option>
-				<option value="Legacy" selected="selected">Legacy</option>
-				<option value="Brwal">Brawl</option>
-				<option value="Commander">Commander</option>
-				<option value="Pioneer">Pioneer</option>
-			</select>
-			 <select type="dropdown" name="color">
-				<option value="W" selected="selected">White</option>
-				<option value="U">Blue</option>
-				<option value="B">Black</option>
-				<option value="R">Red</option>
-				<option value="G">Green</option>
-				<option value="">Colorless</option>
-			</select>
-			 <select type="dropdown" name="type">
-				<option value="creature" selected="selected">Creature</option>
-				<option value="enchantment">Enchantment</option>
-				<option value="instant">Instant</option>
-				<option value="sorcery">Sorcery</option>
-				<option value="artifact">Artifact</option>
-				<option value="land">Land</option>
-			</select>
-			<input type="submit" name="submit" value="Find Cards">
-			<input type="submit" name="submit" value="Create Deck">
-			<input type="submit" name="submit" value="Back">
+			</div>
+				<br/>Card Selecttion : <select type="dropdown" name="format">
+					<option value="Standard">Standard</option>
+					<option value="Modern">Modern</option>
+					<option value="Legacy" selected="selected">Legacy</option>
+					<option value="Brwal">Brawl</option>
+					<option value="Commander">Commander</option>
+					<option value="Pioneer">Pioneer</option>
+				</select>
+				 <select type="dropdown" name="color">
+					<option value="W" selected="selected">White</option>
+					<option value="U">Blue</option>
+					<option value="B">Black</option>
+					<option value="R">Red</option>
+					<option value="G">Green</option>
+					<option value="">Colorless</option>
+				</select>
+				 <select type="dropdown" name="type">
+					<option value="creature" selected="selected">Creature</option>
+					<option value="enchantment">Enchantment</option>
+					<option value="instant">Instant</option>
+					<option value="sorcery">Sorcery</option>
+					<option value="artifact">Artifact</option>
+					<option value="land">Land</option>
+				</select>
+				<input type="submit" name="submit" value="Find Cards">
+				<input type="submit" name="submit" value="Create Deck">
+				<input type="submit" name="submit" value="Back">
 			<div id="hiddenCards">
 		';
 		
@@ -363,7 +461,7 @@ Term project
 			<table><tr>
 		';
 		$CnamePrevious;
-		for($j =1; $j < 14; $j=$j+1)
+		for($j =1; $j < 500 ; $j=$j+1)
 		{
 			for($i =1; $i < 4; $i=$i+1)
 			{
@@ -372,9 +470,10 @@ Term project
 					break;
 				}
 				echo '
-					<td>
+					<td> 
 						<image id="'.$Cname.'" src="'.$Ccard.'"
-							style="width : 200px; height : 300px;" draggable="true" ondragstart="drag(event)">
+							style="width : 200px; height : 300px;"
+							draggable="true" ondragstart="drag(event)">
 					</td>
 				';
 				$CnamePrevious = $Cname;
@@ -410,9 +509,6 @@ Term project
 					$deckList .= $hiddencards[$i] . ",";
 					$i++;
 				}
-				echo'
-					: '.$deckList.' that was the decklist 
-				';
 				
 				$db = new mysqli("db1.cs.uakron.edu:3306", "dtl29", "Pah8quei", "ISP_dtl29");		
 				if ($db->connect_error) 
@@ -421,7 +517,7 @@ Term project
 					exit;
 				}
 				$stmt = $db->prepare("INSERT INTO Decks(name,nameOfCreator,primaryCard,deckList) VALUES(?,?,?,?)");
-				$stmt->bind_param("ssss",deckName,$_SESSION['sessionUser'],$hiddencards[0], $deckList);
+				$stmt->bind_param("ssss",$deckName,$_SESSION['sessionUser'],$hiddencards[0], $deckList);
 				if($stmt->execute())
 				{
 					 echo '<p>Your deck has been added to the database</p>';
