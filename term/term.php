@@ -124,6 +124,8 @@ Term project: card deck database for magic the gatehring
 		</li><br/>
 		<li><a href="./help.html">Help</a></li>
 		<li><a href="./technical.html">Technical</a></li>
+		<li><a href="./FinalRepost.pdf">Final Report</a></li>
+		<li><a href="./Final presentation.pptx">Power Point Slides</a></li>
 	</ul>
 	<div id="mainBody">
 		<div style="float : right; margin-top : 80px; margin-right : 50%;">
